@@ -1,0 +1,29 @@
+{
+  "name": "mongo-viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "mongo": "mongo 116.202.174.120:27017/logs --shell ./index.js -u logger -p 6a88fb0839bf48f48b19e4cfe1545365"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {},
+    "plugins": [],
+    "rules": {
+      "no-console": "warn",
+      "eqeqeq": "off",
+      "no-underscore-dangle": "off",
+      "linebreak-style": "off"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-promise": "^5.1.0"
+  }
+}
