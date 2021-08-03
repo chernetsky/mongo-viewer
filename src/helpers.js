@@ -1,7 +1,7 @@
 const Log =   require('./Log')
 
-const newLog = (action = null, accountId = null) => {
-  const log = new Log('events-sender');
+const newLog = (module, accountId = null, action = null) => {
+  const log = new Log(module);
 
     if (action) {
     log.fields({ action })
@@ -14,4 +14,6 @@ const newLog = (action = null, accountId = null) => {
   return log.hide(['_id', 'module', '_ctx']);
 }
 
-module.expo
+module.exports = {
+  newLog
+}
