@@ -4,17 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "mongo": "mongo 116.202.174.120:27017/logs --shell ./index.js -u logger -p 6a88fb0839bf48f48b19e4cfe1545365"
+    "mongo": "mongosh 116.202.174.120:27017/logs --shell ./index.js -u logger -p 6a88fb0839bf48f48b19e4cfe1545365"
   },
   "eslintConfig": {
     "extends": "airbnb-base",
     "env": {},
     "plugins": [],
     "rules": {
-      "no-console": "warn",
+      "no-console": "off",
       "eqeqeq": "off",
       "no-underscore-dangle": "off",
-      "linebreak-style": "off"
+      "linebreak-style": "off",
+      "no-param-reassign": "off"
     }
   },
   "keywords": [],

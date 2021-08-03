@@ -1,19 +1,14 @@
-const Log =   require('./Log')
+const Log = require('./Log');
+const { LOG_MODULE, LOG_ACCOUNT } = require('./constants');
 
-const newLog = (module, accountId = null, action = null) => {
-  const log = new Log(module);
+const newLog = (db, module = null, accountId = null) => {
+  const log = new Log(db, module || LOG_MODULE);
 
-    if (action) {
-    log.fields({ action })
-  }
-
-  if (accountId) {
-    log.acc(accountId);
-  }
+  log.acc(accountId || LOG_ACCOUNT);
 
   return log.hide(['_id', 'module', '_ctx']);
-}
+};
 
 module.exports = {
-  newLog
-}
+  newLog,
+};

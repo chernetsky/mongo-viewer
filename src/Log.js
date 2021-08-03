@@ -1,5 +1,14 @@
+const { log } = require('./utils');
+
 class Log {
-  constructor(module) {
+  constructor(db, module) {
+    // Свойство _db не enumerable, чтобы оно не выводилось при логировании объекта
+    Object.defineProperty(this, '_db', {
+      enumerable: false,
+      writable: true,
+    });
+    this._db = db;
+
     this._module = module;
     this._baseFields = {};
     this._fields = {};
@@ -8,20 +17,24 @@ class Log {
     this._limit = 2;
     this._offset = 0;
 
-    this.dev(false);
+    this._updateBaseFields();
   }
 
   _updateFieldsObject(fieldsObject, newValues) {
     if (newValues) {
       Object.entries(newValues).forEach(([k, v]) => {
-        if (v == null) { delete fieldsObject[k]; } else { fieldsObject[k] = v; }
+        if (v == null) {
+          delete fieldsObject[k];
+        } else {
+          fieldsObject[k] = v;
+        }
       });
     }
     return this;
   }
 
   _updateBaseFields() {
-    this._baseFields.module = `${this._isDev && 'dev-' || ''}${this._module}`;
+    this._baseFields.module = this._module;
     return this;
   }
 
@@ -35,15 +48,11 @@ class Log {
     return this;
   }
 
-  dev(isDev) {
-    this._isDev = Boolean(isDev);
-    return this._updateBaseFields();
-  }
-
+  // eslint-disable-next-line no-unused-vars
   field(key, value, or = false) {
-    if (Array.isArray(value) || or && this._fields[key]) {
-      // todo: Реализовать логику or
-    }
+    // if (Array.isArray(value) || or && this._fields[key]) {
+    //   // todo: Реализовать логику or
+    // }
     return this._updateFieldsObject(this._fields, { [key]: value });
   }
 
@@ -54,20 +63,20 @@ class Log {
   hide(fieldNames) {
     fieldNames = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
     const fields = {};
-    fieldNames.forEach((f) => fields[f] = 0 );
+    fieldNames.forEach((f) => { fields[f] = 0; });
     return this._updateFieldsObject(this._hideFields, fields);
   }
 
   show(fieldNames) {
     fieldNames = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
     const fields = {};
-    fieldNames.forEach((f) => fields[f] = null );
+    fieldNames.forEach((f) => { fields[f] = null; });
     return this._updateFieldsObject(this._hideFields, fields);
   }
 
   find(fieldsOrAccount) {
     if (fieldsOrAccount) {
-      if (isNaN(Number(fieldsOrAccount))) {
+      if (Number.isNaN(Number(fieldsOrAccount))) {
         this.fields(fieldsOrAccount);
       } else {
         this.acc(fieldsOrAccount);
@@ -76,10 +85,8 @@ class Log {
 
     log(`Module '${this._baseFields.module}'`);
 
-    return db.logs.find(
-      { ...this._fields, ...this._baseFields },
-      this._hideFields,
-    )
+    // eslint-disable-next-line no-undef
+    return this._db.find({ ...this._fields, ...this._baseFields }, this._hideFields)
       .sort({ _id: -1 })
       .skip(this._offset)
       .limit(this._limit)
