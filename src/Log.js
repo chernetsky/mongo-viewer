@@ -1,4 +1,4 @@
-const { log } = require('./utils');
+// const { log } = require('./utils');
 
 class Log {
   constructor(db, module) {
@@ -36,6 +36,11 @@ class Log {
   _updateBaseFields() {
     this._baseFields.module = this._module;
     return this;
+  }
+
+  module(module) {
+    this._module = module;
+    return this._updateBaseFields();
   }
 
   limit(limit) {
@@ -83,9 +88,6 @@ class Log {
       }
     }
 
-    log(`Module '${this._baseFields.module}'`);
-
-    // eslint-disable-next-line no-undef
     return this._db.find({ ...this._fields, ...this._baseFields }, this._hideFields)
       .sort({ _id: -1 })
       .skip(this._offset)
@@ -95,7 +97,7 @@ class Log {
 
   // Сахар
   acc(accountId) {
-    return this.field('_ctx.accountId', String(accountId));
+    return this.field('_ctx.accountId', accountId);
   }
 }
 
